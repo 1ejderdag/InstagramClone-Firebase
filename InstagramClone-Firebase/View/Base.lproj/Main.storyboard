@@ -39,7 +39,7 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Log Out"/>
                                 <connections>
                                     <action selector="logOutClicked:" destination="mbe-eA-1Vl" eventType="touchUpInside" id="2Bm-Te-5qJ"/>
-                                    <segue destination="dHU-t9-sAs" kind="presentation" modalPresentationStyle="fullScreen" id="tvQ-nM-sCh"/>
+                                    <segue destination="BYZ-38-t0r" kind="presentation" identifier="toLoginVC" modalPresentationStyle="fullScreen" id="vlr-LF-984"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -71,7 +71,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="FLk-j0-PGL">
             <objects>
-                <tabBarController id="dHU-t9-sAs" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tabBar" id="dHU-t9-sAs" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="r0p-xH-tnK"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JVI-a8-kVj">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
@@ -97,7 +97,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bBu-aN-7oe">
-                                <rect key="frame" x="65" y="282" width="108" height="68"/>
+                                <rect key="frame" x="65" y="316" width="108" height="68"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="108" id="m0K-od-bRc"/>
                                 </constraints>
@@ -117,7 +117,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nrj-nK-9bU">
-                                <rect key="frame" x="33" y="169" width="327" height="34"/>
+                                <rect key="frame" x="33" y="110" width="327" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="QD5-2t-7SC"/>
                                 </constraints>
@@ -125,12 +125,12 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G6R-QC-kNa">
-                                <rect key="frame" x="33" y="225" width="327" height="34"/>
+                                <rect key="frame" x="33" y="166" width="327" height="127"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instagram Clone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tc7-fC-pIa">
-                                <rect key="frame" x="91" y="77" width="211" height="36"/>
+                                <rect key="frame" x="91" y="18" width="211" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -184,9 +184,6 @@
             <point key="canvasLocation" x="-2585.4961832061067" y="16.901408450704228"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="olt-8W-Et3"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="f.circle.fill" catalog="system" width="128" height="123"/>
         <image name="s.circle.fill" catalog="system" width="128" height="123"/>

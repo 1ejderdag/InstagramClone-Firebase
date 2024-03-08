@@ -20,7 +20,19 @@ class ViewController: UIViewController {
     }
 
     @IBAction func signInClickeed(_ sender: UIButton) {
-        performSegue(withIdentifier: "toFeedVC", sender: nil)
+        
+        if emailTf.text != "" && passwordTf.text != "" {
+            Auth.auth().signIn(withEmail: emailTf.text!, password: passwordTf.text!) { (authdata, error) in
+                if error != nil {
+                    self.makeAlert(titleInput: "Error!!!", messageInput: error?.localizedDescription ?? "Error???")
+                } else {
+                    self.performSegue(withIdentifier: "toFeedVC", sender: nil)
+                }
+            }
+        } else {
+            makeAlert(titleInput: "Erororor", messageInput: "--Email/Password--")
+        }
+        
     }
     
     @IBAction func signUpClicked(_ sender: UIButton) {
