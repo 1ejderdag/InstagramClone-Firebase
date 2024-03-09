@@ -6,24 +6,99 @@
 //
 
 import UIKit
+import FirebaseStorage
+import FirebaseFirestore
+import FirebaseAuth
 
-class UploadViewController: UIViewController {
+class UploadViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    // Fotoğraf seçmenin yeni bir yolu var onu öğren
+    @IBOutlet weak var uploadButton: UIButton!
+    @IBOutlet weak var commentTf: UITextField!
+    @IBOutlet weak var imageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        imageView.isUserInteractionEnabled = true // can be clicked
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
+        imageView.addGestureRecognizer(gestureRecognizer)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func chooseImage() {
+        
+        let pickerContorller = UIImagePickerController()
+        pickerContorller.delegate = self
+        pickerContorller.sourceType = .photoLibrary
+        present(pickerContorller, animated: true, completion: nil)
     }
-    */
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        imageView.image = info[.originalImage] as? UIImage
+        self.dismiss(animated: true, completion: nil)
 
+    }
+    @IBAction func uploadButtonClicked(_ sender: UIButton) {
+        
+        let storage = Storage.storage()
+        
+        let storageReference = storage.reference()
+        
+        let mediaFolder = storageReference.child("media")
+        
+        if let data = imageView.image?.jpegData(compressionQuality: 0.5) {
+            
+            let uuid = UUID().uuidString
+            let imageReference = mediaFolder.child("\(uuid).jpg")
+            imageReference.putData(data, metadata: nil) { (metadata, error) in
+                
+                if error != nil {
+                    self.makeAlert(titleInput: "ERROR!!", messageInput: error?.localizedDescription ?? "Error")
+                } else {
+                    imageReference.downloadURL { (url, error) in
+                        
+                        if error != nil {
+                            self.makeAlert(titleInput: "ERROR!!", messageInput: error?.localizedDescription ?? "Error")
+                        } else {
+                            let imageUrl = url?.absoluteString
+                        
+                            // DATABASE - FİRESTORE
+                            
+                            let firestoreDatabase = Firestore.firestore()
+                            
+                            var firestoreReference: DocumentReference?
+                            
+                            let firestorePost: [String: Any] = ["imageUrl": imageUrl!, "postedBy": Auth.auth().currentUser!.email!, "commentPost": self.commentTf.text!, "date": self.getDateString(), "likes": 0]
+                            
+                            firestoreReference = firestoreDatabase.collection("Posts").addDocument(data: firestorePost, completion: { (error) in
+                                if error != nil {
+                                    self.makeAlert(titleInput: "Errorrr", messageInput: error?.localizedDescription ?? "Errorr")
+                                }
+                            })
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    func makeAlert(titleInput: String, messageInput: String) {
+        
+        let alert = UIAlertController(title: titleInput, message: messageInput, preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OKOKOKOK", style: .default, handler: nil)
+        alert.addAction(okButton)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func getDateString() -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        
+        let currentDate = Date()
+        let formattedDateTime = dateFormatter.string(from: currentDate)
+        
+        return formattedDateTime
+    }
+    
 }
