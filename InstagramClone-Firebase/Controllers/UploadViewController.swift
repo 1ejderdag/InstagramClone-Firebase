@@ -12,7 +12,6 @@ import FirebaseAuth
 
 class UploadViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    // Fotoğraf seçmenin yeni bir yolu var onu öğren
     @IBOutlet weak var uploadButton: UIButton!
     @IBOutlet weak var commentTf: UITextField!
     @IBOutlet weak var imageView: UIImageView!
@@ -68,12 +67,17 @@ class UploadViewController: UIViewController, UIImagePickerControllerDelegate, U
                             
                             var firestoreReference: DocumentReference?
                             
-                            let firestorePost: [String: Any] = ["imageUrl": imageUrl!, "postedBy": Auth.auth().currentUser!.email!, "commentPost": self.commentTf.text!, "date": self.getDateString(), "likes": 0]
+                            let firestorePost: [String: Any] = ["imageUrl": imageUrl!, "postedBy": Auth.auth().currentUser!.email!, "commentPost": self.commentTf.text!, "date": FieldValue.serverTimestamp(), "likes": 0]
                             
                             firestoreReference = firestoreDatabase.collection("Posts").addDocument(data: firestorePost, completion: { (error) in
                                 if error != nil {
                                     self.makeAlert(titleInput: "Errorrr", messageInput: error?.localizedDescription ?? "Errorr")
+                                } else {
+                                    self.imageView.image = UIImage(named: "tapToSelect")
+                                    self.commentTf.text = ""
+                                    self.tabBarController?.selectedIndex = 0
                                 }
+                                
                             })
                         }
                         
@@ -89,16 +93,6 @@ class UploadViewController: UIViewController, UIImagePickerControllerDelegate, U
         let okButton = UIAlertAction(title: "OKOKOKOK", style: .default, handler: nil)
         alert.addAction(okButton)
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    func getDateString() -> String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
-        
-        let currentDate = Date()
-        let formattedDateTime = dateFormatter.string(from: currentDate)
-        
-        return formattedDateTime
     }
     
 }
